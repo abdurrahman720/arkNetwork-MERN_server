@@ -8,8 +8,9 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import { register } from "./controllers/auth";
-import authRoutes from "./routes/auth"
+import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js";
+
 
 
 // configuarations
