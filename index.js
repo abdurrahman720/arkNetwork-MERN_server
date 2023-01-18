@@ -54,5 +54,5 @@ mongoose.connect(process.env.MONGO_URL, {
     useUnifiedTopology: true,
 })
     .then(() => {
-    app.listen(PORT,()=> console.log(`Server port: ${PORT}`))
-}).catch(err => console.error(err))
+        app.listen(PORT, () => console.log(`Server port: ${PORT}`))
+    }).catch(err => console.error(err));
