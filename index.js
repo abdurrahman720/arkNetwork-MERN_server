@@ -1,11 +1,11 @@
-import express from "express";
+import express  from "express";
 import mongoose from "mongoose";
-import bodyParser from "bodyParser";
+import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
 import helmet from "helmet";
-import morgan from "moragan";
+import morgan from "morgan";
 import path from "path";
 import {fileURLToPath} from "url";
 
@@ -22,3 +22,26 @@ app.use(bodyParser.json({limit: "30mb", extended: true}))
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use(cors());
 app.use("/assets",express.static(path.join(__dirname, 'public/assets')));
+
+//file storage
+
+const storage = multer.diskStorage({
+    destination: function (req,res,cb) {
+        cb(null, "public/assets");
+    },
+    filename: function(req,res,cb){
+        cb(null, file.originalname);
+    }
+})
+
+const upload = multer({ storage })
+
+// setup mongoose
+const PORT = process.env.PORT || 5001;
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(() => {
+    app.listen(PORT,()=> console.log(`Server port: ${PORT}`))
+}).catch(err => console.error(err))
