@@ -14,6 +14,10 @@ import userRoutes from "./routes/users.js";
 import postsRoutes from "./routes/posts.js";
 import {createPosts} from './controllers/posts.js'
 import { verifyToken } from "./middleware/auth.js";
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+import { posts, users } from "./data/mockData.js";
+
 
 
 
@@ -59,8 +63,18 @@ app.use("/posts",postsRoutes);
 const PORT = process.env.PORT || 5001;
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useUnifiedTopology: true,
 })
+    
+
     .then(() => {
         app.listen(PORT, () => console.log(`Server port: ${PORT}`))
+       
+        // adding mock data
+
+        // User.insertMany(users);
+        // Post.insertMany(posts);
+
+
+
     }).catch(err => console.error(err));
