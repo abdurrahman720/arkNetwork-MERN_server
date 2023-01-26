@@ -4,27 +4,27 @@ import User from '../models/User.js';
 // create post 
 export const createPosts = async (req, res) => {
     try {
-        const { userId, description, picturePath } = req.body;
-        const user = await User.findById(userId);
-        const newPost = new Post({
-            userId,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            description,
-            userPicturePath: user.picturePath,
-            picturePath,
-            likes: {},
-            comments: []
-        })
-
-        await newPost.save();
-        const posts = await Post.find(); // we need to get all the posts for the feed after creating a post 
-        res.status(201).json(posts)
+      const { userId, description, picturePath } = req.body;
+      const user = await User.findById(userId);
+      const newPost = new Post({
+        userId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        location: user.location,
+        description,
+        userPicturePath: user.picturePath,
+        picturePath,
+        likes: {},
+        comments: [],
+      });
+      await newPost.save();
+  
+      const post = await Post.find();
+      res.status(201).json(post);
+    } catch (err) {
+      res.status(409).json({ message: err.message });
     }
-    catch (err) {
-        res.status(409).json({ message: err.message });
-    }
-}
+  };
 
 // read 
 export const getFeedPosts = async (req, res) => {
@@ -54,14 +54,17 @@ export const likePost = async (req, res) => {
     try {
         const { id } = req.params;
         const { userId } = req.body;
+        console.log(userId);
         const post = await Post.findById(id);
+        console.log(post)
         const isLiked = post.likes.get(userId); // will return a boolean value 
+        console.log(isLiked)
         
         if (isLiked) {
             post.likes.delete(userId); //get, delete and set method is for mapping. check PostSchema to learn more
         }
         else {
-            post.likes.set(userId);
+            post.likes.set(userId,true);
         }
 
         const updatedPost = await Post.findByIdAndUpdate(
